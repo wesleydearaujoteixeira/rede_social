@@ -1,1 +1,2 @@
-# rede_social
+Uma rede social simples, apenas para treinar conceitos importantes de mapeamento, entidades, jpa e integrações com o spring security e outras anotations do spring, arquitetura do projeto feita com banco de dados relacional Mysql,  
+mas seria facilmente implementado com postgres ou oracle.  Nesse projeto é possivel revisar bem o mapeamento @OneToMany  @ManyToOne @Entity e várias outras annotations importantes do JPA. Espero que gostem e se puder deixar um feedback ficarei muito feliz em ouvir criticas construtivas de outros devs. 
