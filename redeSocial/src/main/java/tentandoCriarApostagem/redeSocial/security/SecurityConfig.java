@@ -34,10 +34,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         // libera a rota de login e registro
-                        .requestMatchers("/redes/login").permitAll()
+                        .requestMatchers("/redes/**").permitAll()
                         .requestMatchers("/redes/create").permitAll()
                         .requestMatchers("/redes/usuarios").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
+                        .requestMatchers("https://redesocial-production-5183.up.railway.app/**").permitAll()
 
                         // qualquer outra rota precisa estar autenticada
                         .anyRequest().authenticated()
