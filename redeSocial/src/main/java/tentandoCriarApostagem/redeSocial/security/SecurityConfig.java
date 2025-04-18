@@ -38,7 +38,6 @@ public class SecurityConfig {
                         .requestMatchers("/redes/create").permitAll()
                         .requestMatchers("/redes/usuarios").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
-                        .requestMatchers("https://redesocial-production-5183.up.railway.app/**").permitAll()
 
                         // qualquer outra rota precisa estar autenticada
                         .anyRequest().authenticated()
