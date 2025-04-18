@@ -1,17 +1,22 @@
-FROM ubuntu:latest AS build
+# Etapa 1: build da aplicação
+FROM eclipse-temurin:17-jdk-alpine AS builder
 
-RUN apt-get update
-RUN apt-get install openjdk-17-jdk -y
-
+WORKDIR /app
 COPY . .
 
-RUN apt-get install maven -y
-RUN mvn clean install
+# Build com Maven
+RUN ./mvnw package -DskipTests
 
-FROM openjdk:17-jdk-slim
+# Etapa 2: imagem mais leve pra rodar a aplicação
+FROM eclipse-temurin:17-jre-alpine
 
+WORKDIR /app
+
+# Copia o jar do build anterior
+COPY --from=builder /app/target/*.jar app.jar
+
+# Porta usada pelo Render (pegando da env PORT)
+ENV PORT=8080
 EXPOSE 8080
 
-COPY --from=build /target/redeSocial-0.0.1-SNAPSHOT.jar app.jar
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "app.jar"]
