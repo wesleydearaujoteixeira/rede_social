@@ -66,7 +66,7 @@ public class UserService {
             Files.write(caminhoCompleto, imagem.getBytes());
 
             // Aqui montamos a URL completa
-            usuario.setImagemPerfilUrl("http://localhost:8080" + "/uploads/" + nomeArquivo);
+            usuario.setImagemPerfilUrl("https://rede-social-1vg1.onrender.com" + "/uploads/" + nomeArquivo);
         }
 
         usuarioRepository.save(usuario);
