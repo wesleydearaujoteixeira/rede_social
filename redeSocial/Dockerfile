@@ -2,7 +2,12 @@
 FROM eclipse-temurin:21-jdk-alpine AS builder
 
 WORKDIR /app
-COPY src .
+
+# Copia todos os arquivos, incluindo mvnw e pom.xml
+COPY . .
+
+# Garantir permissão de execução para o mvnw
+RUN chmod +x ./mvnw
 
 # Build com Maven
 RUN ./mvnw package -DskipTests
@@ -16,7 +21,7 @@ WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
 
 # Porta usada pelo Render (pegando da env PORT)
-ENV PORT=8080
 EXPOSE 8080
 
+# Rodar a aplicação
 CMD ["java", "-jar", "app.jar"]
