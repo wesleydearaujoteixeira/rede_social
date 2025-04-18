@@ -56,7 +56,7 @@ public class PostService {
             Files.write(caminhoCompleto, imagem.getBytes());
 
             // Atribuindo o caminho da imagem ao post
-            post.setImagemUrl("http://localhost:8080" + "/uploads/" + nomeArquivo);
+            post.setImagemUrl("https://rede-social-1vg1.onrender.com" + "/uploads/" + nomeArquivo);
         }
 
         // Associando o usuário ao post
