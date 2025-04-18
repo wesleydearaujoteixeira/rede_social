@@ -1,5 +1,7 @@
 package tentandoCriarApostagem.redeSocial.services.usuario;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,11 +21,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class UserService {
+
+
+    @Autowired
+    private Cloudinary cloudinary;
 
     @Autowired
     private UserRepository usuarioRepository;
@@ -58,15 +65,12 @@ public class UserService {
         usuario.setSenha(senha);
 
         if (imagem != null && !imagem.isEmpty()) {
-            String pastaUpload = "uploads/";
-            String nomeArquivo = UUID.randomUUID() + "_" + imagem.getOriginalFilename();
-            Path caminhoCompleto = Paths.get(pastaUpload, nomeArquivo);
+            // Upload para o Cloudinary
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(imagem.getBytes(), ObjectUtils.asMap("folder", "usuarios/"));
 
-            Files.createDirectories(caminhoCompleto.getParent());
-            Files.write(caminhoCompleto, imagem.getBytes());
-
-            // Aqui montamos a URL completa
-            usuario.setImagemPerfilUrl("https://rede-social-1vg1.onrender.com" + "/uploads/" + nomeArquivo);
+            // A URL segura fornecida pelo Cloudinary
+            String imagemUrl = (String) uploadResult.get("secure_url");
+            usuario.setImagemPerfilUrl(imagemUrl); // Armazena a URL da imagem no banco
         }
 
         usuarioRepository.save(usuario);
