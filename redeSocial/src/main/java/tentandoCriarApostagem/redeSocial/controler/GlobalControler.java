@@ -67,6 +67,12 @@ public class GlobalControler {
 
 
 
+    @GetMapping("teste")
+    public String teste () {
+        return "Okay deu certo";
+    }
+
+
     @PostMapping("/create")
     public ResponseEntity<String> criarUsuarioComImagemSimples(
             @RequestParam("nome") String nome,
