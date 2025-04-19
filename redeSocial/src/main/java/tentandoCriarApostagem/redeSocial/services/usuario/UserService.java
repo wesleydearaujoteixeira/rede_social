@@ -1,5 +1,7 @@
 package tentandoCriarApostagem.redeSocial.services.usuario;
 
+
+
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,21 +18,18 @@ import tentandoCriarApostagem.redeSocial.Entities.UsuarioDTO;
 import tentandoCriarApostagem.redeSocial.repository.UserRepository;
 import tentandoCriarApostagem.redeSocial.security.JwtService;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+
+
 
 @Service
 public class UserService {
 
-
-    @Autowired
-    private Cloudinary cloudinary;
 
     @Autowired
     private UserRepository usuarioRepository;
@@ -39,6 +38,11 @@ public class UserService {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    Cloudinary cloudinary;
+
+
 
     public String login(Usuario user) {
         try {
@@ -57,23 +61,68 @@ public class UserService {
 
 
 
-    @Transactional
+
+
+
+
+
+
     public void criarUsuarioComImagemSimples(String nome, String email, String senha, MultipartFile imagem) throws IOException {
         Usuario usuario = new Usuario();
         usuario.setNome(nome);
         usuario.setEmail(email);
-        usuario.setSenha(senha);
+        usuario.setSenha(senha); // Idealmente, você deveria criptografar a senha
+
+//        // Upload da imagem para o Cloudinary
+//        if (imagem != null && !imagem.isEmpty()) {
+//            String pastaUpload = "uploads/";
+//            String nomeArquivo = UUID.randomUUID() + "_" + imagem.getOriginalFilename();
+//            Path caminhoCompleto = Paths.get(pastaUpload, nomeArquivo);
+//
+//            // Cria diretório, se necessário
+//            Files.createDirectories(caminhoCompleto.getParent());
+//            // Salva nova imagem
+//            Files.write(caminhoCompleto, imagem.getBytes());
+//
+//            // Atualiza a URL da imagem no usuário
+//            usuario.setImagemPerfilUrl("/uploads/" + nomeArquivo);
+//
+//
+//        }
+
 
         if (imagem != null && !imagem.isEmpty()) {
-            // Upload para o Cloudinary
-            Map<String, Object> uploadResult = cloudinary.uploader().upload(imagem.getBytes(), ObjectUtils.asMap("folder", "usuarios/"));
+            // Salvar localmente
+            String pastaUpload = "uploads/";
+            String nomeArquivo = UUID.randomUUID() + "_" + imagem.getOriginalFilename();
+            Path caminhoCompleto = Paths.get(pastaUpload, nomeArquivo);
 
-            // A URL segura fornecida pelo Cloudinary
-            String imagemUrl = (String) uploadResult.get("secure_url");
-            usuario.setImagemPerfilUrl(imagemUrl); // Armazena a URL da imagem no banco
+            Files.createDirectories(caminhoCompleto.getParent());
+            Files.write(caminhoCompleto, imagem.getBytes());
+
+            // Upload para Cloudinary
+            File arquivoTemporario = Files.createTempFile("upload", imagem.getOriginalFilename()).toFile();
+            imagem.transferTo(arquivoTemporario);
+
+            Map resultado = cloudinary.uploader().upload(arquivoTemporario, ObjectUtils.emptyMap());
+
+
+            // Obter a URL da imagem hospedada
+            String urlImagemCloudinary = (String) resultado.get("secure_url");
+
+            // Setar a URL da imagem no banco
+            usuario.setImagemPerfilUrl(urlImagemCloudinary);
+
+
+
+            System.out.println("URL: " + resultado.get("secure_url"));
+
+            // Apagar o arquivo temporário
+            arquivoTemporario.delete();
         }
 
         usuarioRepository.save(usuario);
+
     }
 
     @Transactional
