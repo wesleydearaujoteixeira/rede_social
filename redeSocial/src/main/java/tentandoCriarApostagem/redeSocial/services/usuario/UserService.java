@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,6 +43,9 @@ public class UserService {
     @Autowired
     Cloudinary cloudinary;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
 
 
     public String login(Usuario user) {
@@ -66,7 +70,10 @@ public class UserService {
         Usuario usuario = new Usuario();
         usuario.setNome(nome);
         usuario.setEmail(email);
-        usuario.setSenha(senha);
+
+        String senhaCriptografada = passwordEncoder.encode(senha);
+
+        usuario.setSenha(senhaCriptografada);
 
         if (imagem != null && !imagem.isEmpty()) {
             // Salvar localmente
@@ -91,7 +98,6 @@ public class UserService {
             usuario.setImagemPerfilUrl(urlImagemCloudinary);
 
 
-
             // Apagar o arquivo temporário
             arquivoTemporario.delete();
         }
@@ -109,7 +115,13 @@ public class UserService {
             throw new RuntimeException("Usuário não encontrado com o ID: " + id);
         }
 
+
         Usuario usuario = usuarioOptional.get();
+
+        // verificação do usuário logado
+        if (!email.trim().equalsIgnoreCase(usuario.getEmail().trim()) || !passwordEncoder.matches(senha, usuario.getSenha())) {
+            throw new RuntimeException("Email ou senha inválidos!");
+        }
 
         usuario.setNome(nome);
         usuario.setEmail(email);
@@ -127,7 +139,6 @@ public class UserService {
 
                 // Setar a URL da imagem no banco
                 usuario.setImagemPerfilUrl(urlImagemCloudinary);
-
 
                 // Apagar o arquivo temporário
                 arquivoTemporario.delete();

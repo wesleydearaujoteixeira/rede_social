@@ -83,10 +83,8 @@ public class GlobalControler {
 
         try {
 
-            String senhaCriptografada = passwordEncoder.encode(senha);
 
-
-            userService.criarUsuarioComImagemSimples(nome, email, senhaCriptografada, imagem);
+            userService.criarUsuarioComImagemSimples(nome, email, senha, imagem);
             return ResponseEntity.ok("Usuário criado com sucesso!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
@@ -142,7 +140,11 @@ public class GlobalControler {
             @RequestParam String senha,
             @RequestParam(required = false) MultipartFile imagem) {
         try {
+
+
             userService.atualizarUsuarioComImagemSimples(id, nome, email, senha, imagem);
+
+
             return ResponseEntity.ok("Usuário atualizado com sucesso.");
         } catch (IOException e) {
             return ResponseEntity.status(500).body("Erro ao atualizar imagem: " + e.getMessage());
