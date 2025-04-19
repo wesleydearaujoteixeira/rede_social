@@ -33,12 +33,9 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        // libera a rota de login e registro
                         .requestMatchers("/redes/create").permitAll()
                         .requestMatchers("/redes/usuarios").permitAll()
-                        .requestMatchers("/uploads/**").permitAll()
-
-                        // qualquer outra rota precisa estar autenticada
+                        .requestMatchers("redes/login").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
