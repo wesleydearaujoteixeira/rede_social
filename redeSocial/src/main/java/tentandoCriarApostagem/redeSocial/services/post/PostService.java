@@ -65,7 +65,7 @@ public class PostService {
             usuario.setImagemPerfilUrl(urlImagemCloudinary);
 
 
-            System.out.println("URL: " + resultado.get("secure_url"));
+
 
             // Apagar o arquivo temporário
             arquivoTemporario.delete();
@@ -130,9 +130,6 @@ public class PostService {
                     // Setar a URL da imagem no banco
                     postExistente.setImagemUrl(urlImagemCloudinary);
 
-
-
-                    System.out.println("URL: " + resultado.get("secure_url"));
 
                     // Apagar o arquivo temporário
                     arquivoTemporario.delete();

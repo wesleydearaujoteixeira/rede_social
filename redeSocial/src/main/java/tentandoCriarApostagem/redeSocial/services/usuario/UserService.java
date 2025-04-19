@@ -62,11 +62,6 @@ public class UserService {
 
 
 
-
-
-
-
-
     public void criarUsuarioComImagemSimples(String nome, String email, String senha, MultipartFile imagem) throws IOException {
         Usuario usuario = new Usuario();
         usuario.setNome(nome);
@@ -96,8 +91,6 @@ public class UserService {
             usuario.setImagemPerfilUrl(urlImagemCloudinary);
 
 
-
-            System.out.println("URL: " + resultado.get("secure_url"));
 
             // Apagar o arquivo temporário
             arquivoTemporario.delete();
@@ -135,9 +128,6 @@ public class UserService {
                 // Setar a URL da imagem no banco
                 usuario.setImagemPerfilUrl(urlImagemCloudinary);
 
-
-
-                System.out.println("URL: " + resultado.get("secure_url"));
 
                 // Apagar o arquivo temporário
                 arquivoTemporario.delete();
