@@ -1,5 +1,7 @@
 package tentandoCriarApostagem.redeSocial.services.post;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +14,9 @@ import tentandoCriarApostagem.redeSocial.repository.LikeRepository;
 import tentandoCriarApostagem.redeSocial.repository.PostRepository;
 import tentandoCriarApostagem.redeSocial.repository.UserRepository;
 
+import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -37,6 +41,9 @@ public class PostService {
     @Autowired
     private CometarioRepository comentarioRepository;
 
+    @Autowired
+    Cloudinary cloudinary;
+
 
     @Transactional
     public Post criarPost(Post post, Long usuarioId, MultipartFile imagem) throws IOException {
@@ -46,17 +53,22 @@ public class PostService {
 
         // Salvar a imagem se houver
         if (imagem != null && !imagem.isEmpty()) {
-            String pastaUpload = "uploads/";
-            String nomeArquivo = UUID.randomUUID() + "_" + imagem.getOriginalFilename();
-            Path caminhoCompleto = Paths.get(pastaUpload, nomeArquivo);
+            File arquivoTemporario = Files.createTempFile("upload", imagem.getOriginalFilename()).toFile();
+            imagem.transferTo(arquivoTemporario);
 
-            // Criação do diretório, caso não exista
-            Files.createDirectories(caminhoCompleto.getParent());
-            // Salvando o arquivo na pasta
-            Files.write(caminhoCompleto, imagem.getBytes());
+            Map resultado = cloudinary.uploader().upload(arquivoTemporario, ObjectUtils.emptyMap());
 
-            // Atribuindo o caminho da imagem ao post
-            post.setImagemUrl("https://rede-social-1vg1.onrender.com" + "/uploads/" + nomeArquivo);
+            // Obter a URL da imagem hospedada
+            String urlImagemCloudinary = (String) resultado.get("secure_url");
+
+            // Setar a URL da imagem no banco
+            usuario.setImagemPerfilUrl(urlImagemCloudinary);
+
+
+            System.out.println("URL: " + resultado.get("secure_url"));
+
+            // Apagar o arquivo temporário
+            arquivoTemporario.delete();
         }
 
         // Associando o usuário ao post
@@ -104,14 +116,26 @@ public class PostService {
 
                 // Se imagem nova foi enviada
                 if (novaImagem != null && !novaImagem.isEmpty()) {
-                    String pastaUpload = "uploads/";
-                    String nomeArquivo = UUID.randomUUID() + "_" + novaImagem.getOriginalFilename();
-                    Path caminhoCompleto = Paths.get(pastaUpload, nomeArquivo);
 
-                    Files.createDirectories(caminhoCompleto.getParent());
-                    Files.write(caminhoCompleto, novaImagem.getBytes());
 
-                    postExistente.setImagemUrl("http://localhost:8080" + "/uploads/" + nomeArquivo);
+                    File arquivoTemporario = Files.createTempFile("upload", novaImagem.getOriginalFilename()).toFile();
+                    novaImagem.transferTo(arquivoTemporario);
+
+                    Map resultado = cloudinary.uploader().upload(arquivoTemporario, ObjectUtils.emptyMap());
+
+
+                    // Obter a URL da imagem hospedada
+                    String urlImagemCloudinary = (String) resultado.get("secure_url");
+
+                    // Setar a URL da imagem no banco
+                    postExistente.setImagemUrl(urlImagemCloudinary);
+
+
+
+                    System.out.println("URL: " + resultado.get("secure_url"));
+
+                    // Apagar o arquivo temporário
+                    arquivoTemporario.delete();
                 }
 
                 return Optional.of(postRepository.save(postExistente));
