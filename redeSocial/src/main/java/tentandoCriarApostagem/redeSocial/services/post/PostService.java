@@ -62,9 +62,7 @@ public class PostService {
             String urlImagemCloudinary = (String) resultado.get("secure_url");
 
             // Setar a URL da imagem no banco
-            usuario.setImagemPerfilUrl(urlImagemCloudinary);
-
-
+            post.setImagemUrl(urlImagemCloudinary);
 
 
             // Apagar o arquivo temporário
