@@ -71,25 +71,7 @@ public class UserService {
         Usuario usuario = new Usuario();
         usuario.setNome(nome);
         usuario.setEmail(email);
-        usuario.setSenha(senha); // Idealmente, você deveria criptografar a senha
-
-//        // Upload da imagem para o Cloudinary
-//        if (imagem != null && !imagem.isEmpty()) {
-//            String pastaUpload = "uploads/";
-//            String nomeArquivo = UUID.randomUUID() + "_" + imagem.getOriginalFilename();
-//            Path caminhoCompleto = Paths.get(pastaUpload, nomeArquivo);
-//
-//            // Cria diretório, se necessário
-//            Files.createDirectories(caminhoCompleto.getParent());
-//            // Salva nova imagem
-//            Files.write(caminhoCompleto, imagem.getBytes());
-//
-//            // Atualiza a URL da imagem no usuário
-//            usuario.setImagemPerfilUrl("/uploads/" + nomeArquivo);
-//
-//
-//        }
-
+        usuario.setSenha(senha);
 
         if (imagem != null && !imagem.isEmpty()) {
             // Salvar localmente
@@ -127,6 +109,8 @@ public class UserService {
 
     @Transactional
     public void atualizarUsuarioComImagemSimples(Long id, String nome, String email, String senha, MultipartFile novaImagem) throws IOException {
+
+
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
         if (usuarioOptional.isEmpty()) {
             throw new RuntimeException("Usuário não encontrado com o ID: " + id);
@@ -139,22 +123,30 @@ public class UserService {
         usuario.setSenha(senha);
 
         if (novaImagem != null && !novaImagem.isEmpty()) {
-            String pastaUpload = "uploads/";
-            String nomeArquivo = UUID.randomUUID() + "_" + novaImagem.getOriginalFilename();
-            Path caminhoCompleto = Paths.get(pastaUpload, nomeArquivo);
+                // Upload para Cloudinary diretamente do InputStream
+                File arquivoTemporario = Files.createTempFile("upload", novaImagem.getOriginalFilename()).toFile();
+                novaImagem.transferTo(arquivoTemporario);
 
-            // Cria diretório, se necessário
-            Files.createDirectories(caminhoCompleto.getParent());
-            // Salva nova imagem
-            Files.write(caminhoCompleto, novaImagem.getBytes());
+                Map resultado = cloudinary.uploader().upload(arquivoTemporario, ObjectUtils.emptyMap());
 
-            // Atualiza a URL da imagem no usuário
-            usuario.setImagemPerfilUrl("http://localhost:8080/uploads/" + nomeArquivo);
+                // Obter a URL da imagem hospedada
+                String urlImagemCloudinary = (String) resultado.get("secure_url");
+
+                // Setar a URL da imagem no banco
+                usuario.setImagemPerfilUrl(urlImagemCloudinary);
+
+
+
+                System.out.println("URL: " + resultado.get("secure_url"));
+
+                // Apagar o arquivo temporário
+                arquivoTemporario.delete();
+
+
         }
 
         usuarioRepository.save(usuario);
     }
-
 
     public List<Usuario> getUsers(){
         return usuarioRepository.findAll();
