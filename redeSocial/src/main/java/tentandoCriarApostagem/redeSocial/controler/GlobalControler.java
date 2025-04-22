@@ -74,6 +74,18 @@ public class GlobalControler {
     }
 
 
+    @GetMapping("/usuario/{id}")
+
+    public ResponseEntity<?> getAuser (@PathVariable Long id) {
+
+        Usuario user = userService.getUsuarioPorId(id);
+
+        return ResponseEntity.ok(user);
+
+
+    }
+
+
     @PostMapping("/create")
     public ResponseEntity<String> criarUsuarioComImagemSimples(
             @RequestParam("nome") String nome,

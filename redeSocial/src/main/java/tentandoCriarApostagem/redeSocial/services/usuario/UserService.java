@@ -106,6 +106,14 @@ public class UserService {
 
     }
 
+    public Usuario getUsuarioPorId(Long id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID: " + id));
+    }
+
+
+
+
     @Transactional
     public void atualizarUsuarioComImagemSimples(Long id, String nome, String email, String senha, MultipartFile novaImagem) throws IOException {
 
