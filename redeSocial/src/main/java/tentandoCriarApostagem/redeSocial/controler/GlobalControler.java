@@ -3,7 +3,6 @@ package tentandoCriarApostagem.redeSocial.controler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,9 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tentandoCriarApostagem.redeSocial.Entities.*;
-import tentandoCriarApostagem.redeSocial.repository.FollowRepository;
 import tentandoCriarApostagem.redeSocial.repository.PostRepository;
-import tentandoCriarApostagem.redeSocial.repository.UserRepository;
 import tentandoCriarApostagem.redeSocial.security.JwtService;
 import tentandoCriarApostagem.redeSocial.services.comentario.ComentarioService;
 import tentandoCriarApostagem.redeSocial.services.follow.FollowServices;

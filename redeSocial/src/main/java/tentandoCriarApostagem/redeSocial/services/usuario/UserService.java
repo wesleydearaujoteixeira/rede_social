@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import tentandoCriarApostagem.redeSocial.Entities.Usuario;
-import tentandoCriarApostagem.redeSocial.Entities.UsuarioDTO;
 import tentandoCriarApostagem.redeSocial.repository.UserRepository;
 import tentandoCriarApostagem.redeSocial.security.JwtService;
 
@@ -110,8 +109,6 @@ public class UserService {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID: "));
     }
-
-
 
 
     @Transactional
