@@ -64,9 +64,7 @@ public class GlobalControler {
 
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getAuser (@PathVariable Long id) {
-
         Usuario user = userService.getUsuarioPorId(id);
-
         return ResponseEntity.ok(user);
     }
 
@@ -219,9 +217,7 @@ public class GlobalControler {
         if(existingPost){
             return ResponseEntity.ok("Deletado com sucesso " + postId);
         }
-
         return  ResponseEntity.ok(" Post não encontrado!");
-
 
     }
 
