@@ -63,18 +63,13 @@ public class GlobalControler {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    /*
-    @GetMapping("/usuario/{id}")
-
+    @GetMapping("/user/{id}")
     public ResponseEntity<?> getAuser (@PathVariable Long id) {
 
         Usuario user = userService.getUsuarioPorId(id);
 
         return ResponseEntity.ok(user);
     }
-
-     */
-
 
     @PostMapping("/create")
     public ResponseEntity<String> criarUsuarioComImagemSimples(

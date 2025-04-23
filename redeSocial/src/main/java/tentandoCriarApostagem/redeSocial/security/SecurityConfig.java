@@ -36,6 +36,7 @@ public class SecurityConfig {
                         .requestMatchers("/redes/create").permitAll()
                         .requestMatchers("/redes/usuarios").permitAll()
                         .requestMatchers("redes/login").permitAll()
+                        .requestMatchers("redes/user/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
