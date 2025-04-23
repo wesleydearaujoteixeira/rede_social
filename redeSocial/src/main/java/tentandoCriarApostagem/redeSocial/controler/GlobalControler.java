@@ -85,7 +85,6 @@ public class GlobalControler {
 
         try {
 
-
             userService.criarUsuarioComImagemSimples(nome, email, senha, imagem);
             return ResponseEntity.ok("Usuário criado com sucesso!");
         } catch (Exception e) {
