@@ -63,14 +63,7 @@ public class GlobalControler {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
-
-    @GetMapping("teste")
-    public String teste () {
-        return "Okay deu certo";
-    }
-
-
+    /*
     @GetMapping("/usuario/{id}")
 
     public ResponseEntity<?> getAuser (@PathVariable Long id) {
@@ -78,9 +71,9 @@ public class GlobalControler {
         Usuario user = userService.getUsuarioPorId(id);
 
         return ResponseEntity.ok(user);
-
-
     }
+
+     */
 
 
     @PostMapping("/create")
