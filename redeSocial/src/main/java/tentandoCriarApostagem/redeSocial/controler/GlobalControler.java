@@ -24,13 +24,12 @@ import tentandoCriarApostagem.redeSocial.services.usuario.LoginResponseDTO;
 import tentandoCriarApostagem.redeSocial.services.usuario.UserService;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/redes")
+@CrossOrigin(origins = "http://localhost:3000")
 public class GlobalControler {
 
     @Autowired
