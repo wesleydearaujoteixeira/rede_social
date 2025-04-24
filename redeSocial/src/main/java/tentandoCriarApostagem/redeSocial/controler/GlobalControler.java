@@ -302,7 +302,7 @@ public class GlobalControler {
         if(like){
             return ResponseEntity.status(HttpStatus.CREATED).body(" Like dado com sucesso!!! ");
         }else{
-            return  ResponseEntity.badRequest().body("Like removido.");
+            return  ResponseEntity.status(HttpStatus.OK).body("Like removido.");
         }
 
 
