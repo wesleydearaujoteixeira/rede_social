@@ -126,12 +126,10 @@ public class UserService {
             MultipartFile perfilBackground
     ) throws IOException {
 
-
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
         if (usuarioOptional.isEmpty()) {
             throw new RuntimeException("Usuário não encontrado com o ID: " + id);
         }
-
 
         Usuario usuario = usuarioOptional.get();
 
@@ -139,41 +137,32 @@ public class UserService {
         usuario.setBio(bio);
         usuario.setLink(link);
 
-
         if (novaImagem != null && !novaImagem.isEmpty()) {
-                // Upload para Cloudinary diretamente do InputStream
-                File arquivoTemporario = Files.createTempFile("upload", novaImagem.getOriginalFilename()).toFile();
-                novaImagem.transferTo(arquivoTemporario);
+            File arquivoTemporario = Files.createTempFile("upload", novaImagem.getOriginalFilename()).toFile();
+            novaImagem.transferTo(arquivoTemporario);
 
-                Map resultado = cloudinary.uploader().upload(arquivoTemporario, ObjectUtils.emptyMap());
+            Map resultado = cloudinary.uploader().upload(arquivoTemporario, ObjectUtils.emptyMap());
 
-                // Obter a URL da imagem hospedada
-                String urlImagemCloudinary = (String) resultado.get("secure_url");
+            String urlImagemCloudinary = (String) resultado.get("secure_url");
 
-                // Setar a URL da imagem no banco
-                usuario.setImagemPerfilUrl(urlImagemCloudinary);
+            usuario.setImagemPerfilUrl(urlImagemCloudinary);
 
-                // Apagar o arquivo temporário
-                arquivoTemporario.delete();
-
+            arquivoTemporario.delete();
         }
 
-            // agora vamos atualizar a foto de capa que antes não tinha.
-
+        // Só processa o perfilBackground se não for nulo e não estiver vazio
+        if (perfilBackground != null && !perfilBackground.isEmpty()) {
             File arquivoTemporario = Files.createTempFile("upload", perfilBackground.getOriginalFilename()).toFile();
             perfilBackground.transferTo(arquivoTemporario);
 
             Map resultado = cloudinary.uploader().upload(arquivoTemporario, ObjectUtils.emptyMap());
 
-            // Obter a URL da imagem hospedada
             String urlImagemCloudinary = (String) resultado.get("secure_url");
 
-            // Setar a URL da imagem no banco
             usuario.setPerfilBackground(urlImagemCloudinary);
 
-            // Apagar o arquivo temporário
             arquivoTemporario.delete();
-
+        }
 
         usuarioRepository.save(usuario);
     }

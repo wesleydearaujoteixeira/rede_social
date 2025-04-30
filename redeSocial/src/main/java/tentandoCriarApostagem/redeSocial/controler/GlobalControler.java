@@ -1,6 +1,5 @@
 package tentandoCriarApostagem.redeSocial.controler;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -125,13 +124,13 @@ public class GlobalControler {
 
 
 
-    @PutMapping("/{id}")
+    @PatchMapping("/update/{id}")
     public ResponseEntity<String> atualizarUsuario(
             @PathVariable Long id,
-            @RequestParam (required = false) String nome,
-            @RequestParam (required = false) String bio,
-            @RequestParam (required = false) String link,
-            @RequestParam(required = false) MultipartFile imagem,
+            @RequestParam  String nome,
+            @RequestParam  String bio,
+            @RequestParam  String link,
+            @RequestParam (required = false) MultipartFile imagem,
             @RequestParam (required = false) MultipartFile perfilBackground
             ) {
         try {
