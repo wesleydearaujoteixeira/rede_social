@@ -3,6 +3,7 @@ package tentandoCriarApostagem.redeSocial.services.post;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,26 +75,13 @@ public class PostService {
         return postRepository.save(post);
     }
 
-
-    public List<Post> getPostServices (Long usuarioId, Long postId) {
-
-        Optional<Post> getUsersPost = postRepository.findById(postId);
-
-        if(getUsersPost.isPresent()){
-
-            Post postGet = getUsersPost.get();
-
-            if(postGet.getUsuario().getId().equals(usuarioId)){
-                return List.of(postGet);
-            }
-
-
-        }
-
-        return List.of();
-
-
+    public Post getPostById(Long postId) {
+        // 1) Buscar o post
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post não encontrado com id: " + postId));
+        return post;
     }
+
 
     public List<Post> getALL () {
             return postRepository.findAll();

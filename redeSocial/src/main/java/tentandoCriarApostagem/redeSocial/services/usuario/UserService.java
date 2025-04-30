@@ -117,7 +117,14 @@ public class UserService {
 
 
     @Transactional
-    public void atualizarUsuarioComImagemSimples(Long id, String nome, String email, String senha, MultipartFile novaImagem) throws IOException {
+    public void atualizarUsuarioComImagemSimples(
+            Long id,
+            String nome,
+            String bio,
+            String link,
+            MultipartFile novaImagem,
+            MultipartFile perfilBackground
+    ) throws IOException {
 
 
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
@@ -128,14 +135,10 @@ public class UserService {
 
         Usuario usuario = usuarioOptional.get();
 
-        // verificação do usuário logado
-        if (!email.trim().equalsIgnoreCase(usuario.getEmail().trim()) || !passwordEncoder.matches(senha, usuario.getSenha())) {
-            throw new RuntimeException("Email ou senha inválidos!");
-        }
-
         usuario.setNome(nome);
-        usuario.setEmail(email);
-        usuario.setSenha(senha);
+        usuario.setBio(bio);
+        usuario.setLink(link);
+
 
         if (novaImagem != null && !novaImagem.isEmpty()) {
                 // Upload para Cloudinary diretamente do InputStream
@@ -153,8 +156,24 @@ public class UserService {
                 // Apagar o arquivo temporário
                 arquivoTemporario.delete();
 
-
         }
+
+            // agora vamos atualizar a foto de capa que antes não tinha.
+
+            File arquivoTemporario = Files.createTempFile("upload", perfilBackground.getOriginalFilename()).toFile();
+            perfilBackground.transferTo(arquivoTemporario);
+
+            Map resultado = cloudinary.uploader().upload(arquivoTemporario, ObjectUtils.emptyMap());
+
+            // Obter a URL da imagem hospedada
+            String urlImagemCloudinary = (String) resultado.get("secure_url");
+
+            // Setar a URL da imagem no banco
+            usuario.setPerfilBackground(urlImagemCloudinary);
+
+            // Apagar o arquivo temporário
+            arquivoTemporario.delete();
+
 
         usuarioRepository.save(usuario);
     }

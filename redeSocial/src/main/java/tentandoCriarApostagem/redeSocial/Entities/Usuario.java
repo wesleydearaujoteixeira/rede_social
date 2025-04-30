@@ -25,6 +25,10 @@ public class Usuario implements UserDetails {
     private String senha;
     private String imagemPerfilUrl;
 
+    private String perfilBackground;
+    private String bio;
+    private String link;
+
     @OneToMany(mappedBy = "seguidor")
     private List<Follow> seguindo;
 
@@ -125,4 +129,35 @@ public class Usuario implements UserDetails {
     public void setImagemPerfilUrl(String imagemPerfilUrl) {
         this.imagemPerfilUrl = imagemPerfilUrl;
     }
+
+
+    public String getPerfilBackground() {
+        return perfilBackground;
+    }
+
+    public void setPerfilBackground(String perfilBackground) {
+        this.perfilBackground = perfilBackground;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public int getTotalPosts() {
+        return posts != null ? posts.size() : 0;
+    }
+
+
 }

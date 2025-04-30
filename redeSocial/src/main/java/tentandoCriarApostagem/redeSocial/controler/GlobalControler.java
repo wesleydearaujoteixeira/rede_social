@@ -129,13 +129,15 @@ public class GlobalControler {
     public ResponseEntity<String> atualizarUsuario(
             @PathVariable Long id,
             @RequestParam String nome,
-            @RequestParam String email,
-            @RequestParam String senha,
-            @RequestParam(required = false) MultipartFile imagem) {
+            @RequestParam String bio,
+            @RequestParam String link,
+            @RequestParam(required = false) MultipartFile imagem,
+            @RequestParam MultipartFile perfilBackground
+            ) {
         try {
 
 
-            userService.atualizarUsuarioComImagemSimples(id, nome, email, senha, imagem);
+            userService.atualizarUsuarioComImagemSimples(id, nome, bio, link,  imagem, perfilBackground);
 
 
             return ResponseEntity.ok("Usuário atualizado com sucesso.");
@@ -215,17 +217,19 @@ public class GlobalControler {
         boolean existingPost = postService.deletePost(postId, usuarioId);
 
         if(existingPost){
-            return ResponseEntity.ok("Deletado com sucesso " + postId);
+            return ResponseEntity.ok("Deletando postagem com o id " + postId);
         }
-        return  ResponseEntity.ok(" Post não encontrado!");
+        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Postagem não encontrada");
 
     }
 
 
-    @GetMapping("/get/{postId}/{usuarioId}")
-    public List<Post> todosPosts (@PathVariable Long postId, @PathVariable Long usuarioId) {
-       return postService.getPostServices(postId, usuarioId);
-
+    @GetMapping("/get/{postId}")
+    public ResponseEntity<Post> getPost(
+            @PathVariable Long postId
+    ) {
+        Post post = postService.getPostById(postId);
+        return ResponseEntity.ok(post);
     }
 
     @GetMapping("/all")
@@ -288,7 +292,7 @@ public class GlobalControler {
             return ResponseEntity.ok("Deletado com sucesso o comentario " + comentId);
         }
 
-        return  ResponseEntity.ok(" Comentário não encontrado!");
+        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(" Problema na exclusão do comentário ");
 
 
     }
