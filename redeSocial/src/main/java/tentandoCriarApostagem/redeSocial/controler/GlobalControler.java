@@ -128,9 +128,9 @@ public class GlobalControler {
     @PutMapping("/{id}")
     public ResponseEntity<String> atualizarUsuario(
             @PathVariable Long id,
-            @RequestParam String nome,
-            @RequestParam String bio,
-            @RequestParam String link,
+            @RequestParam (required = false) String nome,
+            @RequestParam (required = false) String bio,
+            @RequestParam (required = false) String link,
             @RequestParam(required = false) MultipartFile imagem,
             @RequestParam (required = false) MultipartFile perfilBackground
             ) {
