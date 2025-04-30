@@ -132,7 +132,7 @@ public class GlobalControler {
             @RequestParam String bio,
             @RequestParam String link,
             @RequestParam(required = false) MultipartFile imagem,
-            @RequestParam MultipartFile perfilBackground
+            @RequestParam (required = false) MultipartFile perfilBackground
             ) {
         try {
 
