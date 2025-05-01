@@ -87,6 +87,11 @@ public class PostService {
             return postRepository.findAll();
     }
 
+    public List<Post> getPostsByUserId(Long userId) {
+        return postRepository.findByUsuarioId(userId);
+    }
+
+
     public Optional<Post> atualizarPost(Post postagemAtual, Long postId, Long usuarioId, MultipartFile novaImagem) throws IOException {
         Optional<Post> optionalPostExisting = postRepository.findById(postId);
 

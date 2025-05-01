@@ -237,6 +237,13 @@ public class GlobalControler {
 
     }
 
+    @GetMapping("/posts/usuario/{userId}")
+    public ResponseEntity<List<Post>> getPostsByUser(@PathVariable Long userId) {
+        List<Post> posts = postService.getPostsByUserId(userId);
+        return ResponseEntity.ok(posts);
+    }
+
+
     @PostMapping("/comentario/{postId}/{usuarioId}")
     public ResponseEntity<?> comentar(@RequestBody Comentario comentarioRes,  @PathVariable Long postId, @PathVariable Long usuarioId){
 
@@ -351,6 +358,13 @@ public class GlobalControler {
     public ResponseEntity<List<UsuarioResumoDTO>> listarSeguidores(@PathVariable Long usuarioId) {
         return ResponseEntity.ok(followService.listarSeguidores(usuarioId));
     }
+
+    @GetMapping("/sugestoes/{userId}")
+    public ResponseEntity<List<UsuarioResumoDTO>> listarNaoSeguidos(@PathVariable Long userId) {
+        List<UsuarioResumoDTO> naoSeguidos = followService.listarUsuariosNaoSeguidos(userId);
+        return ResponseEntity.ok(naoSeguidos);
+    }
+
 
 
 

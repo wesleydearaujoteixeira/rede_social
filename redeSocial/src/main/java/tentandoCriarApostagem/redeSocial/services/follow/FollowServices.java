@@ -71,4 +71,13 @@ public class FollowServices {
                 .map(f -> new UsuarioResumoDTO(f.getSeguidor()))
                 .collect(Collectors.toList());
     }
+
+
+
+    public List<UsuarioResumoDTO> listarUsuariosNaoSeguidos(Long userId) {
+        List<Usuario> usuarios = usuarioRepository.findUsuariosNaoSeguidos(userId);
+        return usuarios.stream()
+                .map(UsuarioResumoDTO::new)
+                .collect(Collectors.toList());
+    }
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import tentandoCriarApostagem.redeSocial.Entities.Usuario;
+import tentandoCriarApostagem.redeSocial.Entities.UsuarioResumoDTO;
 import tentandoCriarApostagem.redeSocial.repository.UserRepository;
 import tentandoCriarApostagem.redeSocial.security.JwtService;
 
@@ -24,7 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-
+import java.util.stream.Collectors;
 
 
 @Service
@@ -183,6 +184,9 @@ public class UserService {
         }
 
     }
+
+
+
 
 
 
