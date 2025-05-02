@@ -29,9 +29,29 @@ public class Usuario implements UserDetails {
     private String bio;
     private String link;
 
-    @OneToMany(mappedBy = "seguidor")
-    private List<Follow> seguindo;
+    @OneToMany(mappedBy = "seguidor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Follow> seguindo = new ArrayList<>();
 
+    @OneToMany(mappedBy = "seguido", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Follow> seguidores = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Comentario> comentarios = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Like> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Resposta> respostas = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -68,26 +88,7 @@ public class Usuario implements UserDetails {
         return true;
     }
 
-
-
-    // Relacionamento de um para muitos (Um usuário pode ter muitos posts)
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Post> posts;
-
-    // Relacionamento de um para muitos (Um usuário pode ter muitos comentários)
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comentario> comentarios;
-
-    // Relacionamento de um para muitos (Um usuário pode dar muitos likes)
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Like> likes;
-
-    // Relacionamento de um para muitos (Um usuário pode criar muitas respostas)
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Resposta> respostas;
-
     // Getters and Setters
-
 
     public Long getId() {
         return id;
@@ -121,7 +122,6 @@ public class Usuario implements UserDetails {
         this.senha = senha;
     }
 
-
     public String getImagemPerfilUrl() {
         return imagemPerfilUrl;
     }
@@ -129,7 +129,6 @@ public class Usuario implements UserDetails {
     public void setImagemPerfilUrl(String imagemPerfilUrl) {
         this.imagemPerfilUrl = imagemPerfilUrl;
     }
-
 
     public String getPerfilBackground() {
         return perfilBackground;
@@ -155,9 +154,55 @@ public class Usuario implements UserDetails {
         this.link = link;
     }
 
+    public List<Follow> getSeguindo() {
+        return seguindo;
+    }
+
+    public void setSeguindo(List<Follow> seguindo) {
+        this.seguindo = seguindo;
+    }
+
+    public List<Follow> getSeguidores() {
+        return seguidores;
+    }
+
+    public void setSeguidores(List<Follow> seguidores) {
+        this.seguidores = seguidores;
+    }
+
     public int getTotalPosts() {
         return posts != null ? posts.size() : 0;
     }
 
+    public List<Post> getPosts() {
+        return posts;
+    }
 
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
+    public List<Comentario> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
+    }
+
+    public List<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Like> likes) {
+        this.likes = likes;
+    }
+
+    public List<Resposta> getRespostas() {
+        return respostas;
+    }
+
+    public void setRespostas(List<Resposta> respostas) {
+        this.respostas = respostas;
+    }
 }
