@@ -14,6 +14,7 @@ public class Post {
     private Long id;
 
     private String titulo;
+    @Column(columnDefinition = "TEXT")
     private String conteudo;
     private String imagemUrl; // Caminho da imagem
 
