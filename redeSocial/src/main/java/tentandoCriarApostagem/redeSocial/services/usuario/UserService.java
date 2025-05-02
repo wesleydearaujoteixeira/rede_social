@@ -90,16 +90,16 @@ public class UserService {
 
             Map resultado = cloudinary.uploader().upload(arquivoTemporario, ObjectUtils.emptyMap());
 
-
             // Obter a URL da imagem hospedada
             String urlImagemCloudinary = (String) resultado.get("secure_url");
 
             // Setar a URL da imagem no banco
             usuario.setImagemPerfilUrl(urlImagemCloudinary);
 
-
             // Apagar o arquivo temporário
             arquivoTemporario.delete();
+        }else {
+            usuario.setImagemPerfilUrl("");
         }
 
         usuarioRepository.save(usuario);

@@ -166,6 +166,13 @@ public class GlobalControler {
 
     }
 
+    @GetMapping("/search/{query}")
+    public ResponseEntity<List<Post>> pesquisarPostagens(@PathVariable String query) {
+        List<Post> posts = postService.buscarPostsPorConteudo(query);
+        return ResponseEntity.ok(posts);
+    }
+
+
 
     // Endpoint para criar um novo post
     @PostMapping("/post/create")

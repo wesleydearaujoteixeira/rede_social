@@ -152,6 +152,9 @@ public class PostService {
 
     }
 
+    public List<Post> buscarPostsPorConteudo(String termo) {
+        return postRepository.buscarPorConteudo(termo);
+    }
 
 
 
