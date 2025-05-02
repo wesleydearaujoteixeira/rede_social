@@ -15,7 +15,7 @@ public class Comentario {
     @OneToMany(mappedBy = "comentario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Resposta> respostas;
 
-
+    @Column(columnDefinition = "TEXT")
     private String texto;
 
     // Muitos comentários pertencem a um post
