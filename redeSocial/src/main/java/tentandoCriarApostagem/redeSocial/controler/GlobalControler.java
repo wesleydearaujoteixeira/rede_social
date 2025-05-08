@@ -381,7 +381,7 @@ public class GlobalControler {
         return notificacaoRepository.findByDestinatarioIdAndLidaFalse(id);
     }
 
-    @PostMapping("/marcar-lida/{id}")
+    @PostMapping("/marcarlida/{id}")
     public void marcarComoLida(@PathVariable Long id) {
         notificacaoRepository.findById(id).ifPresent(n -> {
             n.setLida(true);
