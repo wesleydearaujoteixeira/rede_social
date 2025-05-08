@@ -2,11 +2,9 @@ package tentandoCriarApostagem.redeSocial.services.comentario;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tentandoCriarApostagem.redeSocial.Entities.Comentario;
-import tentandoCriarApostagem.redeSocial.Entities.ComentarioDTO;
-import tentandoCriarApostagem.redeSocial.Entities.Post;
-import tentandoCriarApostagem.redeSocial.Entities.Usuario;
+import tentandoCriarApostagem.redeSocial.Entities.*;
 import tentandoCriarApostagem.redeSocial.repository.CometarioRepository;
+import tentandoCriarApostagem.redeSocial.repository.NotificacaoRepository;
 import tentandoCriarApostagem.redeSocial.repository.PostRepository;
 import tentandoCriarApostagem.redeSocial.repository.UserRepository;
 
@@ -27,6 +25,8 @@ public class ComentarioService {
     @Autowired
     private UserRepository usuarioRepository;
 
+    @Autowired
+    private NotificacaoRepository notificacaoRepository;
 
     public Comentario criarComentario(Comentario comentario, Long usuarioId, Long postId) {
         // Buscar o post e o usuário
@@ -40,7 +40,22 @@ public class ComentarioService {
         comentario.setUsuario(usuario);
 
         // Salvando o comentário no banco de dados
-        return cometarioRepository.save(comentario);
+
+        // Enviar notificação para o dono do post
+        String postOwnerUsername = post.getUsuario().getUsername();  // Nome de usuário do dono do post
+        String commenterUsername = usuario.getUsername();  // Nome de usuário do comentarista
+        Comentario comentarioSaved = cometarioRepository.save(comentario);
+
+        if (!usuario.getId().equals(post.getUsuario().getId())) { // evita notificação se o próprio dono comentar
+            Notificacao notificacao = new Notificacao();
+            notificacao.setDestinatario(post.getUsuario());
+            notificacao.setMensagem(usuario.getNome() + " comentou no seu post. ");
+            notificacao.setComentario(comentarioSaved);
+            notificacaoRepository.save(notificacao);
+        }
+
+
+        return comentarioSaved;
     }
 
 

@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tentandoCriarApostagem.redeSocial.Entities.*;
+import tentandoCriarApostagem.redeSocial.repository.NotificacaoRepository;
 import tentandoCriarApostagem.redeSocial.repository.PostRepository;
 import tentandoCriarApostagem.redeSocial.security.JwtService;
 import tentandoCriarApostagem.redeSocial.services.comentario.ComentarioService;
@@ -60,6 +61,9 @@ public class GlobalControler {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private NotificacaoRepository notificacaoRepository;
 
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getAuser (@PathVariable Long id) {
@@ -370,6 +374,19 @@ public class GlobalControler {
     public ResponseEntity<List<UsuarioResumoDTO>> listarNaoSeguidos(@PathVariable Long userId) {
         List<UsuarioResumoDTO> naoSeguidos = followService.listarUsuariosNaoSeguidos(userId);
         return ResponseEntity.ok(naoSeguidos);
+    }
+
+    @GetMapping("/notificando/usuario/{id}")
+    public List<Notificacao> getNotificacoesNaoLidas(@PathVariable Long id) {
+        return notificacaoRepository.findByDestinatarioIdAndLidaFalse(id);
+    }
+
+    @PostMapping("/marcar-lida/{id}")
+    public void marcarComoLida(@PathVariable Long id) {
+        notificacaoRepository.findById(id).ifPresent(n -> {
+            n.setLida(true);
+            notificacaoRepository.save(n);
+        });
     }
 
 
