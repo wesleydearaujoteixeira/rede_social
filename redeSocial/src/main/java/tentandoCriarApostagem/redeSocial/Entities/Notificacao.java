@@ -1,6 +1,8 @@
 package tentandoCriarApostagem.redeSocial.Entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -21,6 +23,7 @@ public class Notificacao {
     private Usuario destinatario;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Comentario comentario;
 
     public Long getId() {

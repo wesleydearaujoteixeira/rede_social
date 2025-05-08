@@ -1,5 +1,6 @@
 package tentandoCriarApostagem.redeSocial.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -27,6 +28,10 @@ public class Comentario {
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+
+    @OneToMany(mappedBy = "comentario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Notificacao> notificacoes;
 
     // Construtores
 
