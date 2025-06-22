@@ -87,8 +87,6 @@ public class GlobalControler {
         }
     }
 
-    // login
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Usuario user) {
         // Validação simples de entrada
