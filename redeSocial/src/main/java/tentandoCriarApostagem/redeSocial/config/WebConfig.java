@@ -15,7 +15,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://social-azure-seven.vercel.app")
+                        .allowedOrigins("https://rede-social-front-end-puce.vercel.app/")
                         .allowedMethods("*");
             }
         };
