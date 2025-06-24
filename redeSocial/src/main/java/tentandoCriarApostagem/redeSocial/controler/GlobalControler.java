@@ -182,7 +182,7 @@ public class GlobalControler {
             @RequestParam("titulo") String titulo,
             @RequestParam("conteudo") String texto,
             @RequestParam("usuarioId") Long usuarioId,
-            @RequestParam("imagem") MultipartFile imagem) throws IOException {
+            @RequestParam(value = "imagem", required = false)  MultipartFile imagem) throws IOException {
 
         // Criação do post com a imagem
         Post post = new Post();
