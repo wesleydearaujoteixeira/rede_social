@@ -99,37 +99,38 @@ public class PostService {
             Post postExistente = optionalPostExisting.get();
 
             // Verifica se o post pertence ao usuário
-            if (postExistente.getUsuario().getId().equals(usuarioId)) {
-                postExistente.setTitulo(postagemAtual.getTitulo());
-                postExistente.setConteudo(postagemAtual.getConteudo());
-
-                // Se imagem nova foi enviada
-                if (novaImagem != null && !novaImagem.isEmpty()) {
-
-
-                    File arquivoTemporario = Files.createTempFile("upload", novaImagem.getOriginalFilename()).toFile();
-                    novaImagem.transferTo(arquivoTemporario);
-
-                    Map resultado = cloudinary.uploader().upload(arquivoTemporario, ObjectUtils.emptyMap());
-
-
-                    // Obter a URL da imagem hospedada
-                    String urlImagemCloudinary = (String) resultado.get("secure_url");
-
-                    // Setar a URL da imagem no banco
-                    postExistente.setImagemUrl(urlImagemCloudinary);
-
-
-                    // Apagar o arquivo temporário
-                    arquivoTemporario.delete();
-                }
-
-                return Optional.of(postRepository.save(postExistente));
+            if (!postExistente.getUsuario().getId().equals(usuarioId)) {
+                throw new SecurityException("Você não tem permissão para atualizar este post.");
             }
+
+            // Atualiza apenas se não for null
+            if (postagemAtual.getTitulo() != null) {
+                postExistente.setTitulo(postagemAtual.getTitulo());
+            }
+
+            if (postagemAtual.getConteudo() != null) {
+                postExistente.setConteudo(postagemAtual.getConteudo());
+            }
+
+            // Atualiza imagem se houver uma nova
+            if (novaImagem != null && !novaImagem.isEmpty()) {
+                File arquivoTemporario = Files.createTempFile("upload", novaImagem.getOriginalFilename()).toFile();
+                novaImagem.transferTo(arquivoTemporario);
+
+                Map resultado = cloudinary.uploader().upload(arquivoTemporario, ObjectUtils.emptyMap());
+
+                String urlImagemCloudinary = (String) resultado.get("secure_url");
+                postExistente.setImagemUrl(urlImagemCloudinary);
+
+                arquivoTemporario.delete();
+            }
+
+            return Optional.of(postRepository.save(postExistente));
         }
 
         return Optional.empty();
     }
+
 
 
     public boolean deletePost (Long postId, Long usuarioId) {

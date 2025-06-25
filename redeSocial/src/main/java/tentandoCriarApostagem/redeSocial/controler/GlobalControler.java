@@ -196,7 +196,7 @@ public class GlobalControler {
     }
 
 
-    @PutMapping("/post/atualizar/{postId}")
+    @PatchMapping("/post/atualizar/{postId}")
     public ResponseEntity<?> atualizarPost(
             @PathVariable Long postId,
             @RequestParam("titulo") String titulo,
@@ -209,6 +209,7 @@ public class GlobalControler {
             Post postParaAtualizar = new Post();
             postParaAtualizar.setTitulo(titulo);
             postParaAtualizar.setConteudo(conteudo);
+
 
             Optional<Post> postAtualizado = postService.atualizarPost(postParaAtualizar, postId, usuarioId, imagem);
 
