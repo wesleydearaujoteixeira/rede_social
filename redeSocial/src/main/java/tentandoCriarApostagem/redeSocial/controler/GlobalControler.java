@@ -29,7 +29,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/redes")
-@CrossOrigin(origins = "https://social-azure-seven.vercel.app")
+@CrossOrigin(origins = "https://rede-social-front-end-puce.vercel.app")
 public class GlobalControler {
 
     @Autowired
@@ -205,6 +205,7 @@ public class GlobalControler {
             @RequestParam(value = "imagem", required = false) MultipartFile imagem) {
 
         try {
+
             Post postParaAtualizar = new Post();
             postParaAtualizar.setTitulo(titulo);
             postParaAtualizar.setConteudo(conteudo);
