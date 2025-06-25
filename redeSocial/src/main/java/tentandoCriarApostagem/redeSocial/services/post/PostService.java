@@ -98,12 +98,11 @@ public class PostService {
         if (optionalPostExisting.isPresent()) {
             Post postExistente = optionalPostExisting.get();
 
-            // Verifica se o post pertence ao usuário
             if (!postExistente.getUsuario().getId().equals(usuarioId)) {
                 throw new SecurityException("Você não tem permissão para atualizar este post.");
             }
 
-            // Atualiza apenas se não for null
+
             if (postagemAtual.getTitulo() != null) {
                 postExistente.setTitulo(postagemAtual.getTitulo());
             }
@@ -112,7 +111,6 @@ public class PostService {
                 postExistente.setConteudo(postagemAtual.getConteudo());
             }
 
-            // Atualiza imagem se houver uma nova
             if (novaImagem != null && !novaImagem.isEmpty()) {
                 File arquivoTemporario = Files.createTempFile("upload", novaImagem.getOriginalFilename()).toFile();
                 novaImagem.transferTo(arquivoTemporario);
