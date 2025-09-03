@@ -4,7 +4,7 @@ FROM eclipse-temurin:21-jdk-alpine AS builder
 WORKDIR /app
 
 # Copia todos os arquivos, incluindo mvnw e pom.xml
-COPY redeSocial .
+COPY . .
 
 # Garantir permissão de execução para o mvnw
 RUN chmod +x ./mvnw
