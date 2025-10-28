@@ -29,7 +29,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/redes")
-@CrossOrigin(origins = "https://rede-social-front-end-puce.vercel.app")
+@CrossOrigin(origins = "https://rede-social-front-end-three.vercel.app/")
 public class GlobalControler {
 
     @Autowired
